@@ -14,7 +14,10 @@ CREATE TABLE employees (
   PRIMARY KEY (id)
 );
 
-INSERT INTO employees (id, first_name, last_name, title, department, salary, manager)
-VALUES (
+INSERT INTO employees (first_name, last_name, title, department, salary, manager)
+VALUES 
+("john", "doe", "manager", "example", 25800, "manager"),
+("jesse", "james", "sales", "example", 30000, "manager"),
+("james", "bond", "tech", "example2", 15700, "manager2");
 
 SELECT * FROM employees;

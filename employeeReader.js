@@ -68,6 +68,24 @@ function askWhatToDo() {
 function viewAll() {
     var query = "SELECT * FROM employees";
     connection.query(query, (err, res) => {
+        console.log('\n');
         console.table(res);
+        askWhatToDo();
     })
+}
+
+function viewAllDep() {
+    inquirer
+        .prompt({
+            name: "department",
+            type: "input",
+            message: "What department would you like to search for?"
+        })
+        .then(function (answer) {
+            var query = "SELECT * FROM employees WHERE ?";
+            connection.query(query, {department: answer.department}, (err, res) => {
+                console.table(res);
+                askWhatToDo();
+            });
+        });
 }
