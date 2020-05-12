@@ -28,7 +28,8 @@ function askWhatToDo() {
         addEmployee,
         removeEmployee,
         updateRole,
-        updateManager
+        updateManager,
+        "Exit"
     ];
 
     inquirer
@@ -58,9 +59,8 @@ function askWhatToDo() {
                 case updateRole:
                     updateR();
                     break;
-                case updateManager:
-                    updateM();
-                    break;
+                case "Exit":
+                    connection.end();
             }
         });
 }
@@ -84,6 +84,22 @@ function viewAllDep() {
         .then(function (answer) {
             var query = "SELECT * FROM employees WHERE ?";
             connection.query(query, {department: answer.department}, (err, res) => {
+                console.table(res);
+                askWhatToDo();
+            });
+        });
+}
+
+function viewAllRole() {
+    inquirer
+        .prompt({
+            name: "role",
+            type: "input",
+            message: "What role would you like to search for?"
+        })
+        .then(function (answer) {
+            var query = "SELECT * FROM employees WHERE ?";
+            connection.query(query, {role: answer.role}, (err, res) => {
                 console.table(res);
                 askWhatToDo();
             });
