@@ -41,26 +41,33 @@ function askWhatToDo() {
         .then(answer => {
             switch (answer.action) {
                 case viewAllEmployees:
-                    //envoke function
+                    viewAll();
                     break;
                 case viewAllByDepartment:
-                    //envoke function
+                    viewAllDep();
                     break;
                 case viewAllByRole:
-                    //envoke function
+                    viewAllRole();
                     break;
                 case addEmployee:
-                    //envoke function
+                    add();
                     break;
                 case removeEmployee:
-                    //envoke function
+                    remove();
                     break;
                 case updateRole:
-                    //envoke function
+                    updateR();
                     break;
                 case updateManager:
-                    //envoke function
+                    updateM();
                     break;
             }
         });
+}
+
+function viewAll() {
+    var query = "SELECT * FROM employees";
+    connection.query(query, (err, res) => {
+        console.table(res);
+    })
 }
