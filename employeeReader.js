@@ -164,3 +164,20 @@ function add() {
             });
         });
 }
+
+function remove() {
+    return inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "Please enter the id # of the Employee you'd like to remove: "
+            }
+        ])
+        .then(function (answer) {
+            connection.query("DELETE FROM employees WHERE ?", { id: answer.id }, (err, res) => {
+                if (err) throw err;
+                askWhatToDo();
+            })
+        });
+}
