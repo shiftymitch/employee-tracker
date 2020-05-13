@@ -105,3 +105,62 @@ function viewAllRole() {
             });
         });
 }
+
+function add() {
+    return inquirer
+        .prompt([
+            {
+                name: "first_name",
+                type: "input",
+                message: "First Name: "
+            },
+            {
+                name: "last_name",
+                type: "input",
+                message: "Last Name: "
+            },
+            {
+                name: "role",
+                type: "input",
+                message: "Role: "
+            },
+            {
+                name: "department",
+                type: "input",
+                message: "Department: "
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "Salary: "
+            },
+            {
+                name: "manager",
+                type: "input",
+                message: "Manager: "
+            }
+        ])
+        .then(function (answer) {
+            const firstName = answer.first_name;
+            const lastName = answer.last_name;
+            const role = answer.role;
+            const department = answer.department;
+            const salary = answer.salary;
+            const manager = answer.manager;
+            
+            var query = "INSERT INTO employees SET ?";
+            connection.query(query, 
+                {
+                    first_name: firstName,
+                    last_name: lastName,
+                    role: role,
+                    department: department,
+                    salary: salary,
+                    manager: manager
+                },
+                (err, res) => {
+                if (err) throw err;
+                askWhatToDo();
+            });
+        });
+}
