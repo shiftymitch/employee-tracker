@@ -107,7 +107,7 @@ function viewAllRole() {
 }
 
 function add() {
-    return inquirer
+    inquirer
         .prompt([
             {
                 name: "first_name",
@@ -166,7 +166,7 @@ function add() {
 }
 
 function remove() {
-    return inquirer
+    inquirer
         .prompt([
             {
                 name: "id",
@@ -176,6 +176,33 @@ function remove() {
         ])
         .then(function (answer) {
             connection.query("DELETE FROM employees WHERE ?", { id: answer.id }, (err, res) => {
+                if (err) throw err;
+                askWhatToDo();
+            })
+        });
+}
+
+function updateR() {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "Please enter the id # of the Employee you'd like to update: "
+            },
+            {
+                name: "role",
+                type: "input",
+                message: "New Role: "
+            }
+        ])
+        .then(function (answer) {
+            connection.query("UPDATE employees SET ? WHERE ?", 
+            [
+                { role: answer.role}, 
+                {id: answer.id }
+            ], 
+            (err, res) => {
                 if (err) throw err;
                 askWhatToDo();
             })
