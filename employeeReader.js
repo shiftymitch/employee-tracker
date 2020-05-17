@@ -7,6 +7,7 @@ const connection = mysql.createConnection({
     password: "password",
     database: "employee_db"
 });
+
 connection.connect(err => {
     if (err) throw err;
     askWhatToDo();
@@ -58,6 +59,9 @@ function askWhatToDo() {
                     break;
                 case updateRole:
                     updateR();
+                    break;
+                case updateManager:
+                    updateM();
                     break;
                 case "Exit":
                     connection.end();
@@ -121,13 +125,32 @@ function add() {
             },
             {
                 name: "role",
-                type: "input",
-                message: "Role: "
+                type: "rawlist",
+                message: "Role: ",
+                choices: [
+                    "Accountant",
+                    "Lead Engineer",
+                    "Legal Team Lead",
+                    "Lawyer",
+                    "Manager",
+                    "Sales Lead",
+                    "Salesperson",
+                    "Software Engineer"
+                ]
             },
             {
                 name: "department",
-                type: "input",
-                message: "Department: "
+                type: "rawlist",
+                message: "Department: ",
+                choices: [
+                    "Accounting",
+                    "Customer Service",
+                    "Engineering",
+                    "Legal",
+                    "Management",
+                    "Sales",
+                    "Technical Support"
+                ]
             },
             {
                 name: "salary",
@@ -147,17 +170,18 @@ function add() {
             const department = answer.department;
             const salary = answer.salary;
             const manager = answer.manager;
+
+            const newEmployee = {
+                first_name: firstName,
+                last_name: lastName,
+                role: role,
+                department: department,
+                salary: salary,
+                manager: manager
+            }
             
             var query = "INSERT INTO employees SET ?";
-            connection.query(query, 
-                {
-                    first_name: firstName,
-                    last_name: lastName,
-                    role: role,
-                    department: department,
-                    salary: salary,
-                    manager: manager
-                },
+            connection.query(query, newEmployee,
                 (err, res) => {
                 if (err) throw err;
                 askWhatToDo();
@@ -199,8 +223,35 @@ function updateR() {
         .then(function (answer) {
             connection.query("UPDATE employees SET ? WHERE ?", 
             [
-                { role: answer.role}, 
-                {id: answer.id }
+                { role: answer.role },
+                { id: answer.id }
+            ], 
+            (err, res) => {
+                if (err) throw err;
+                askWhatToDo();
+            })
+        });
+}
+
+function updateM() {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "Please enter the id # of the Employee you'd like to update: "
+            },
+            {
+                name: "manager",
+                type: "input",
+                message: "New Manager: "
+            }
+        ])
+        .then(function (answer) {
+            connection.query("UPDATE employees SET ? WHERE ?", 
+            [
+                { manager: answer.manager },
+                { id: answer.id }
             ], 
             (err, res) => {
                 if (err) throw err;
