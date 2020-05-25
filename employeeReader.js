@@ -70,12 +70,15 @@ function askWhatToDo() {
 }
 
 function viewAll() {
-    var query = "SELECT * FROM employees";
+    var query = "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.id, department.department_name ";
+    query += "FROM employee ";
+    query += "INNER JOIN role ON (employee.role_id = role.id) ";
+    query += "INNER JOIN department ON (role.department_id = department.id)";
     connection.query(query, (err, res) => {
         console.log('\n');
         console.table(res);
         askWhatToDo();
-    })
+    });
 }
 
 function viewAllDep() {
