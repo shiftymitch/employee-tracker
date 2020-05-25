@@ -47,7 +47,7 @@ VALUES
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
-("Accounting", "Guy", 1, 4),
-("Engineer", "Girl", 3, 3),
-("Lead", "Engineer", 5, 4),
-("Business", "Guy", 2, null);
+("Austin", "Powers", 1, 4),
+("Heather", "Gram", 3, 3),
+("Number", "2", 2, 4),
+("Dr", "Evil", 6, null);
