@@ -22,9 +22,16 @@ A node application for storing employee data such as role, salary and management
 
 1. Run 'npm start'
 2. View All Employees
-3. Add New Employees
-4. Delete Exisiting Employees
-5. Update Exisiting Employees
+3. View All Departments
+4. View All Roles
+5. View All Employees - by Department
+6. View All Employees - by Role
+7. Add New Employee
+8. Add New Role
+9. Add New Department
+10. Remove Employee
+11. Update Employee Role
+12. Update Employee Manager
 
 ## Credits
 

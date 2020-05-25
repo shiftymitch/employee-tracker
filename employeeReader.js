@@ -27,7 +27,6 @@
         const addNewDepartment = "Add New Department";
         const removeEmployee = "Remove Employee";
         const updateRole = "Update Employee Role";
-        const updateManager = "Update Employee Manager";
 
         const choices = [
             viewAllEmployees, 
@@ -40,7 +39,6 @@
             addNewDepartment,
             removeEmployee,
             updateRole,
-            updateManager,
             "Exit"
         ];
 
@@ -82,9 +80,6 @@
                         break;
                     case updateRole:
                         updateR();
-                        break;
-                    case updateManager:
-                        updateM();
                         break;
                     case "Exit":
                         connection.end();
@@ -436,34 +431,6 @@
                 connection.query("UPDATE employee SET ? WHERE ?", 
                 [
                     { role_id: roleId },
-                    { id: answer.id }
-                ], 
-                (err, res) => {
-                    if (err) throw err;
-                    askWhatToDo();
-                })
-            });
-    }
-
-//! Update Employee Manager
-    function updateM() {
-        inquirer
-            .prompt([
-                {
-                    name: "id",
-                    type: "input",
-                    message: "Please enter the id # of the Employee you'd like to update: "
-                },
-                {
-                    name: "manager",
-                    type: "input",
-                    message: "New Manager: "
-                }
-            ])
-            .then(function (answer) {
-                connection.query("UPDATE employees SET ? WHERE ?", 
-                [
-                    { manager: answer.manager },
                     { id: answer.id }
                 ], 
                 (err, res) => {
