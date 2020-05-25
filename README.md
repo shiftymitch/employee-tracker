@@ -1,6 +1,6 @@
 # Employee Tracker
 
-![](./assets/img/employeetracker.png)
+![](./assets/img/employeetracker2.png)
 
 ## Description
 
