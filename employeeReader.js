@@ -70,7 +70,7 @@ function askWhatToDo() {
 }
 
 function viewAll() {
-    var query = "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.id, department.department_name ";
+    var query = "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, employee.manager_id, role.title, role.salary, role.department_id, department.department_name ";
     query += "FROM employee ";
     query += "INNER JOIN role ON (employee.role_id = role.id) ";
     query += "INNER JOIN department ON (role.department_id = department.id)";
@@ -82,15 +82,29 @@ function viewAll() {
 }
 
 function viewAllDep() {
+    let choices = [
+        "accounting", 
+        "engineering", 
+        "legal", 
+        "senior management", 
+        "sales"
+    ];
+    
     inquirer
         .prompt({
             name: "department",
-            type: "input",
-            message: "What department would you like to search for?"
+            type: "rawlist",
+            message: "What department would you like to search for?",
+            choices: choices
         })
         .then(function (answer) {
-            var query = "SELECT * FROM employees WHERE ?";
-            connection.query(query, {department: answer.department}, (err, res) => {
+            console.log(answer);
+            var query = "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, employee.manager_id, role.title, role.salary, role.department_id, department.department_name ";
+            query += "FROM employee ";
+            query += "LEFT JOIN role ON (employee.role_id = role.id) ";
+            query += "RIGHT JOIN department ON (role.department_id = department.id)";
+            query += "WHERE ?";
+            connection.query(query, { department_name: answer.department }, (err, res) => {
                 console.table(res);
                 askWhatToDo();
             });
@@ -98,15 +112,32 @@ function viewAllDep() {
 }
 
 function viewAllRole() {
+    let choices = [
+        "accountant", 
+        "business manager", 
+        "engineer", 
+        "lawyer", 
+        "lead engineer",
+        "partner",
+        "salesperson",
+        "sales manager"
+    ];
+    
     inquirer
         .prompt({
-            name: "role",
-            type: "input",
-            message: "What role would you like to search for?"
+            name: "title",
+            type: "rawlist",
+            message: "What role would you like to search for?",
+            choices: choices
         })
         .then(function (answer) {
-            var query = "SELECT * FROM employees WHERE ?";
-            connection.query(query, {role: answer.role}, (err, res) => {
+            console.log(answer);
+            var query = "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, employee.manager_id, role.title, role.salary, role.department_id, department.department_name ";
+            query += "FROM employee ";
+            query += "LEFT JOIN role ON (employee.role_id = role.id) ";
+            query += "RIGHT JOIN department ON (role.department_id = department.id)";
+            query += "WHERE ?";
+            connection.query(query, { title: answer.title }, (err, res) => {
                 console.table(res);
                 askWhatToDo();
             });
@@ -127,63 +158,65 @@ function add() {
                 message: "Last Name: "
             },
             {
-                name: "role",
+                name: "role_id",
                 type: "rawlist",
                 message: "Role: ",
                 choices: [
-                    "Accountant",
-                    "Lead Engineer",
-                    "Legal Team Lead",
-                    "Lawyer",
-                    "Manager",
-                    "Sales Lead",
-                    "Salesperson",
-                    "Software Engineer"
+                    "accountant", 
+                    "business manager", 
+                    "engineer", 
+                    "lawyer", 
+                    "lead engineer",
+                    "partner",
+                    "salesperson",
+                    "sales manager"
                 ]
             },
             {
-                name: "department",
-                type: "rawlist",
-                message: "Department: ",
-                choices: [
-                    "Accounting",
-                    "Customer Service",
-                    "Engineering",
-                    "Legal",
-                    "Management",
-                    "Sales",
-                    "Technical Support"
-                ]
-            },
-            {
-                name: "salary",
-                type: "input",
-                message: "Salary: "
-            },
-            {
-                name: "manager",
+                name: "manager_id",
                 type: "input",
                 message: "Manager: "
             }
         ])
         .then(function (answer) {
+            let roleId = "";
+
+            switch (answer.role_id) {
+                case "accountant":
+                    roleId = 1;
+                    break;
+                case "engineer":
+                    roleId = 3;
+                    break;
+                case "lawyer":
+                    roleId = 4;
+                    break;
+                case "lead engineer":
+                    roleId = 5;
+                    break;
+                case "partner":
+                    roleId = 6;
+                    break;
+                case "salesperson":
+                    roleId = 7;
+                    break;
+                case "sales manager":
+                    roleId = 8;
+                    break;
+            }
+
             const firstName = answer.first_name;
             const lastName = answer.last_name;
-            const role = answer.role;
-            const department = answer.department;
-            const salary = answer.salary;
-            const manager = answer.manager;
+            const managerId = answer.manager_id;
 
             const newEmployee = {
                 first_name: firstName,
                 last_name: lastName,
-                role: role,
-                department: department,
-                salary: salary,
-                manager: manager
+                role_id: roleId,
+                manager_id: managerId
             }
             
-            var query = "INSERT INTO employees SET ?";
+            var query = "INSERT INTO employee SET ?";
             connection.query(query, newEmployee,
                 (err, res) => {
                 if (err) throw err;
